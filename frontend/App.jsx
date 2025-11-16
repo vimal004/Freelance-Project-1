@@ -1,9 +1,11 @@
 import { Routes, Route } from "react-router-dom";
 import DashboardLayout from "./src/Components/DashboardLayout.jsx";
 import DashboardPage from "./src/pages/DashboardPage.jsx";
+import ItemsPage from "./src/pages/ItemsPage.jsx";
+import NewItemPage from "./src/pages/NewItemPage.jsx";
 import "./App.css";
 
-// --- Placeholder Pages (You will build these later) ---
+// --- Placeholder Pages (Keep this simplified) ---
 const PlaceholderPage = ({ title }) => (
   <div className="p-6">
     <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
@@ -12,19 +14,24 @@ const PlaceholderPage = ({ title }) => (
     </p>
   </div>
 );
-
 // --- End Placeholder Pages ---
 
 function App() {
   return (
     <Routes>
-      {/* Main Dashboard Layout Route */}
+      {/* Main Dashboard Layout Route: All other routes are children of this layout */}
       <Route path="/" element={<DashboardLayout />}>
         {/* Home/Dashboard Page */}
         <Route index element={<DashboardPage />} />
 
+        {/* --- CORRECTED Item Routes --- */}
+        {/* 1. Items List Page: /items */}
+        <Route path="items" element={<ItemsPage />} />
+        {/* 2. New Item Form Page: /items/new */}
+        <Route path="items/new" element={<NewItemPage />} />
+        {/* ------------------------------- */}
+
         {/* Nested Routes matching the sidebar structure */}
-        <Route path="items" element={<PlaceholderPage title="Items" />} />
         <Route
           path="sales/customers"
           element={<PlaceholderPage title="Customers" />}

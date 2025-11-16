@@ -116,17 +116,7 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-      {/* Floating Help/Assistance Button */}
-      <div className="fixed bottom-6 right-6 z-10">
-        <button className="flex items-center bg-pink-500 text-white p-3 rounded-full shadow-lg hover:bg-pink-600 transition duration-300">
-          <img
-            src="path/to/chat-icon.svg"
-            alt="Chat"
-            className="w-5 h-5 mr-2"
-          />
-          Need Assistance?
-        </button>
-      </div>
+      
     </div>
   );
 };
