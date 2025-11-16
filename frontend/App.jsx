@@ -1,11 +1,30 @@
-import { Routes, Route } from "react-router-dom";
+import React from "react";
+import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+// --- Existing Imports ---
 import DashboardLayout from "./src/Components/DashboardLayout.jsx";
 import DashboardPage from "./src/pages/DashboardPage.jsx";
 import ItemsPage from "./src/pages/ItemsPage.jsx";
 import NewItemPage from "./src/pages/NewItemPage.jsx";
 import "./App.css";
 
-// --- Placeholder Pages (Keep this simplified) ---
+// --- New Imports ---
+import LoginPage from "./src/pages/LoginPage.jsx";
+import { isAuthenticated } from "./src/utils/auth.js";
+// --- End New Imports ---
+
+// --- Protected Route Wrapper ---
+// This component checks for authentication and renders the layout/children if true
+const ProtectedRoute = () => {
+  // If the user is NOT authenticated, redirect them to the login page (/).
+  if (!isAuthenticated()) {
+    return <Navigate to="/" replace />;
+  }
+  // If authenticated, render the Dashboard Layout which contains the <Outlet /> for nested routes.
+  return <DashboardLayout />;
+};
+// --- End Protected Route Wrapper ---
+
+// --- Placeholder Pages (Used for other navigation items) ---
 const PlaceholderPage = ({ title }) => (
   <div className="p-6">
     <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
@@ -14,22 +33,39 @@ const PlaceholderPage = ({ title }) => (
     </p>
   </div>
 );
-// --- End Placeholder Pages ---
+
+// --- 404 Page Component ---
+const NotFound = () => (
+  <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
+    <h1 className="text-4xl font-bold text-red-600">404 - Not Found</h1>
+    <p className="mt-4 text-gray-600">
+      The page you requested could not be found.
+    </p>
+    <Link
+      to="/"
+      className="mt-6 py-2 px-4 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition"
+    >
+      Go to Login
+    </Link>
+  </div>
+);
+// --- End 404 Page Component ---
 
 function App() {
   return (
     <Routes>
-      {/* Main Dashboard Layout Route: All other routes are children of this layout */}
-      <Route path="/" element={<DashboardLayout />}>
-        {/* Home/Dashboard Page */}
-        <Route index element={<DashboardPage />} />
+      {/* 1. Public Route: Login Page (Root Route) */}
+      <Route path="/" element={<LoginPage />} />
 
-        {/* --- CORRECTED Item Routes --- */}
-        {/* 1. Items List Page: /items */}
+      {/* 2. Protected Routes: All dashboard content nested under the ProtectedRoute */}
+      <Route element={<ProtectedRoute />}>
+        {/* The index route for authenticated users is /home */}
+        <Route path="/home" index element={<DashboardPage />} />
+
+        {/* --- Item Routes --- */}
         <Route path="items" element={<ItemsPage />} />
-        {/* 2. New Item Form Page: /items/new */}
         <Route path="items/new" element={<NewItemPage />} />
-        {/* ------------------------------- */}
+        {/* --------------------- */}
 
         {/* Nested Routes matching the sidebar structure */}
         <Route
@@ -74,10 +110,10 @@ function App() {
           path="documents"
           element={<PlaceholderPage title="Documents" />}
         />
-
-        {/* Catch-all route for 404 (optional) */}
-        <Route path="*" element={<PlaceholderPage title="404 Not Found" />} />
       </Route>
+
+      {/* Catch-all route for 404 */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
