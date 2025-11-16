@@ -11,7 +11,7 @@ const Header = () => (
   <header className="flex items-center justify-between h-16 bg-white border-b border-gray-200 px-6">
     {/* Company Info */}
     <div className="flex flex-col text-sm">
-      <div className="font-semibold text-gray-900">Hello, arulmani.g</div>
+      <div className="font-semibold text-gray-900">Hello, Arulmani.G</div>
       <div className="text-xs text-gray-500">Kayaa Electronics Pvt Ltd</div>
     </div>
 

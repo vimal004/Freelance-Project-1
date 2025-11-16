@@ -27,7 +27,7 @@ const IconMap = {
 };
 
 const navItems = [
-  { name: "Home", path: "/", icon: "Home", isSingle: true },
+  { name: "Home", path: "/Home", icon: "Home", isSingle: true },
   {
     name: "Items",
     icon: "Items",

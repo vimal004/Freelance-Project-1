@@ -25,7 +25,7 @@ const LoginPage = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-xl shadow-2xl border border-gray-200">
         <h2 className="text-3xl font-extrabold text-center text-blue-700">
-          MERN Dashboard
+          Kayaa Pvt Ltd. Inventory System Login
         </h2>
         <p className="text-center text-gray-600">Sign in to your account</p>
         <form className="space-y-6" onSubmit={handleSubmit}>
