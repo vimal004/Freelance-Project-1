@@ -1,11 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   CurrencyRupeeIcon,
   PlusIcon,
   ChevronDownIcon,
 } from "@heroicons/react/24/outline";
+import ShimmerDashboard from "../Components/ShimmerDashboard"; // <--- IMPORT SHIMMER
 
 const DashboardPage = () => {
+  // 1. Add loading state
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 2. Simulate data fetching delay
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 1500); // Show shimmer for 1.5 seconds
+
+    // Cleanup the timer
+    return () => clearTimeout(timer);
+  }, []);
+
+  // 3. Render Shimmer UI if loading
+  if (isLoading) {
+    return <ShimmerDashboard />;
+  }
+
+  // 4. Render actual content once loading is complete
   return (
     <div className="p-6">
       {/* Tabs / Navigation */}
@@ -13,7 +33,12 @@ const DashboardPage = () => {
         <h2 className="py-2 px-1 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 cursor-pointer">
           Dashboard
         </h2>
-        
+        <h2 className="py-2 px-1 text-sm text-gray-600 hover:text-blue-600 cursor-pointer">
+          Getting Started
+        </h2>
+        <h2 className="py-2 px-1 text-sm text-gray-600 hover:text-blue-600 cursor-pointer">
+          Recent Updates
+        </h2>
       </div>
 
       {/* Receivables & Payables Cards */}
@@ -116,7 +141,6 @@ const DashboardPage = () => {
           </div>
         </div>
       </div>
-      
     </div>
   );
 };
