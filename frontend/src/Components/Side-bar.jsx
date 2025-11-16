@@ -191,18 +191,7 @@ const Sidebar = () => {
           <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">
             Apps
           </h4>
-          <Link
-            to="/apps/payroll"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
-          >
-            Zoho Payroll
-          </Link>
-          <Link
-            to="/apps/payments"
-            className="flex items-center p-3 text-sm text-gray-700 hover:bg-gray-100 rounded-md"
-          >
-            Zoho Payments
-          </Link>
+         
         </div>
 
         {/* Configure Features Button */}
