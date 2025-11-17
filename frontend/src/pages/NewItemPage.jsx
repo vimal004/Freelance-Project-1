@@ -119,10 +119,11 @@ const NewItemPage = () => {
   );
 
   return (
-    <div className="p-8">
-      {/* Header - Consistent Look */}
-      <div className="flex justify-between items-center mb-8 border-b pb-4">
-        <h1 className="text-3xl font-extrabold text-gray-900">New Item</h1>
+    // Responsive padding
+    <div className="p-4 sm:p-8">
+      {/* Header - Made action items wrap on very small screens */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 border-b pb-4">
+        <h1 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-3 sm:mb-0">New Item</h1>
         <div className="flex space-x-3">
           <Link
             to="/items"
@@ -137,13 +138,13 @@ const NewItemPage = () => {
       </div>
 
       {/* Item Form Card - Consistent Elevation */}
-      <div className=" bg-white p-8 rounded-xl shadow-xl-2 border border-gray-100">
+      <div className=" bg-white p-6 sm:p-8 rounded-xl shadow-xl-2 border border-gray-100">
         
         {/* Type & Name Row */}
         <div className="space-y-8">
           
-          {/* Item Type */}
-          <div className="flex items-center space-x-10">
+          {/* Item Type - Made responsive */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-10">
             <LabelWithInfo>Type</LabelWithInfo>
             <div className="flex space-x-6">
               <label className="flex items-center text-sm font-medium">
@@ -171,8 +172,8 @@ const NewItemPage = () => {
             </div>
           </div>
 
-          {/* Name Input */}
-          <div className="w-full sm:w-1/2">
+          {/* Name Input - Changed w-1/2 to be fully responsive */}
+          <div className="w-full md:w-1/2"> 
             <LabeledInput
               id="itemName"
               label="Name"
@@ -182,8 +183,8 @@ const NewItemPage = () => {
             />
           </div>
 
-          {/* Unit Dropdown */}
-          <div className="w-full sm:w-1/2">
+          {/* Unit Dropdown - Changed w-1/2 to be fully responsive */}
+          <div className="w-full md:w-1/2"> 
             <DropdownSelect
               label="Unit"
               options={UNIT_OPTIONS}
@@ -196,7 +197,7 @@ const NewItemPage = () => {
 
         <div className="h-px bg-gray-200 mt-10 mb-8"></div> {/* Separator */}
 
-        {/* Sales & Purchase Columns */}
+        {/* Sales & Purchase Columns - Layout stacks on mobile (default grid-cols-1) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           {/* LEFT COLUMN: Sales Information */}
           <div className="space-y-6">
@@ -242,8 +243,9 @@ const NewItemPage = () => {
             </div>
           </div>
 
-          {/* RIGHT COLUMN: Purchase Information */}
-          <div className="space-y-6 border-t md:border-t-0 md:border-l md:pl-12 pt-8 md:pt-0 border-gray-200">
+          {/* RIGHT COLUMN: Purchase Information - Adjusted borders for mobile stacking */}
+          {/* The border-t and pt-8 ensure separation when stacking on mobile */}
+          <div className="space-y-6 border-t pt-8 border-gray-200 md:border-t-0 md:border-l md:pl-12 md:pt-0">
             <div className="flex justify-between items-center mb-4">
               <h4 className="text-lg font-bold text-gray-800">
                 Purchase Information

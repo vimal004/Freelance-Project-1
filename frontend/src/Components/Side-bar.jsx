@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import {
   HomeIcon,
   CubeIcon,
@@ -12,9 +12,9 @@ import {
   ChevronRightIcon,
   PlusIcon,
   ChartPieIcon,
+  XMarkIcon, // New import for close button
 } from "@heroicons/react/24/outline";
 
-// Simplified icons for demonstration (replace with your custom SVGs later)
 const IconMap = {
   Home: HomeIcon,
   Items: CubeIcon,
@@ -173,18 +173,31 @@ const SidebarItem = ({ item }) => {
   );
 };
 
-const Sidebar = () => {
+// Updated Sidebar component to handle responsive props
+const Sidebar = ({ isOpen, onClose }) => {
   return (
-    // Enhanced Sidebar shadow (shadow-xl-2)
-    <div className="w-64 flex-shrink-0 bg-white border-r border-gray-200 h-full overflow-y-auto shadow-xl-2"> 
-      <div className="p-4 flex flex-col h-full">
-        {/* App Logo/Header placeholder - Premium Look */}
-        <Link to="/home" className="flex items-center text-2xl font-black text-blue-700 mb-8 px-2 py-1 tracking-wider">
-          <ChartPieIcon className="w-7 h-7 mr-2 text-blue-500" />
-          Kayaa ERP
-        </Link>
+    // Use fixed width on large screens, or full screen overlay on small screens
+    <div 
+        className={`
+            fixed top-0 left-0 h-full bg-white border-r border-gray-200 z-50 
+            transition-transform duration-300 ease-in-out 
+            ${isOpen ? 'translate-x-0 shadow-xl-2' : '-translate-x-full'} 
+            lg:translate-x-0 lg:static lg:w-64 lg:flex-shrink-0
+        `}
+    >
+      <div className="p-4 flex flex-col h-full w-64">
+        {/* Header with Close Button for Mobile */}
+        <div className="flex justify-between items-center mb-8 px-2 py-1">
+            <Link to="/home" className="flex items-center text-2xl font-black text-blue-700 tracking-wider">
+              <ChartPieIcon className="w-7 h-7 mr-2 text-blue-500" />
+              Kayaa ERP
+            </Link>
+            <button onClick={onClose} className="lg:hidden p-1 rounded-full text-gray-500 hover:bg-gray-100">
+                <XMarkIcon className="w-6 h-6" />
+            </button>
+        </div>
 
-        <ul className="space-y-1 flex-1">
+        <ul className="space-y-1 flex-1 overflow-y-auto">
           {navItems.map((item, index) => (
             <SidebarItem key={index} item={item} />
           ))}
