@@ -1,2 +1,8 @@
 @import "tailwindcss";
 
+/* Apply Inter font to all elements for a Material-like feel */
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+  }
+}
