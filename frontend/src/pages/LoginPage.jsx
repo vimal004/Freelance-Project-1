@@ -110,12 +110,6 @@ const LoginPage = () => {
             </button>
           </div>
         </form>
-        
-        {/* Footer Text */}
-        <div className="text-center text-sm text-gray-500 pt-4">
-           Need help? <a href="#" className="font-semibold text-blue-600 hover:text-blue-700 transition">Contact Support</a>
-        </div>
-
       </div>
     </div>
   );
