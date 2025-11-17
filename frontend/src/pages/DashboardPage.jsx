@@ -3,141 +3,157 @@ import {
   CurrencyRupeeIcon,
   PlusIcon,
   ChevronDownIcon,
+  ArrowTrendingUpIcon, 
+  ArrowTrendingDownIcon, 
 } from "@heroicons/react/24/outline";
-import ShimmerDashboard from "../Components/ShimmerDashboard"; // <--- IMPORT SHIMMER
+import ShimmerDashboard from "../Components/ShimmerDashboard";
+import { Link } from "react-router-dom"; 
 
 const DashboardPage = () => {
-  // 1. Add loading state
   const [isLoading, setIsLoading] = useState(true);
-
-  // 2. Simulate data fetching delay
+  
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Show shimmer for 1.5 seconds
-
-    // Cleanup the timer
+    }, 1500); 
     return () => clearTimeout(timer);
   }, []);
 
-  // 3. Render Shimmer UI if loading
   if (isLoading) {
     return <ShimmerDashboard />;
   }
+  
+  // Helper component for the Metric Boxes (Current/Overdue) - Refined Look
+  const MetricBox = ({ title, amount, isOverdue = false }) => (
+    <div className="flex-1 p-4 bg-white border border-gray-100 rounded-lg transition duration-300 hover:shadow-lg-2 cursor-default">
+      <p className={`text-xs font-semibold uppercase ${isOverdue ? "text-red-600" : "text-gray-500"}`}>{title}</p>
+      <div className={`flex items-center ${isOverdue ? "text-red-700" : "text-gray-900"} text-2xl font-extrabold mt-1`}>
+        <CurrencyRupeeIcon className="w-5 h-5 mr-1" />
+        {amount.toFixed(2)}
+        {isOverdue && <ChevronDownIcon className="w-4 h-4 ml-2 text-red-500" />}
+      </div>
+    </div>
+  );
 
-  // 4. Render actual content once loading is complete
+  // Reusable Card Component - Consistent Elevation
+  const DashboardCard = ({ title, icon, color, children }) => (
+    <div className="bg-white p-6 rounded-xl shadow-lg-2 border border-gray-100 h-full flex flex-col">
+      <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+        <div className="flex items-center space-x-3">
+            <span className={`p-2 rounded-full bg-${color}-100`}>
+                {icon}
+            </span>
+            <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+        </div>
+        <Link 
+            to="/items/new" 
+            className="flex items-center text-blue-600 text-sm font-semibold py-1 px-3 rounded-full hover:bg-blue-50 transition"
+        >
+            <PlusIcon className="w-4 h-4 mr-1" />
+            New
+        </Link>
+      </div>
+      {children}
+    </div>
+  );
+
+
   return (
-    <div className="p-6">
-      {/* Tabs / Navigation */}
-      <div className="flex space-x-6 border-b border-gray-200 mb-6">
-        <h2 className="py-2 px-1 text-sm font-semibold border-b-2 border-blue-600 text-blue-600 cursor-pointer">
-          Dashboard
-        </h2>
-        <h2 className="py-2 px-1 text-sm text-gray-600 hover:text-blue-600 cursor-pointer">
-          Getting Started
-        </h2>
-        <h2 className="py-2 px-1 text-sm text-gray-600 hover:text-blue-600 cursor-pointer">
-          Recent Updates
-        </h2>
+    <div className="p-8 space-y-8">
+      {/* Page Title & Tabs - Cleaner, heavier font weight */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between border-b border-gray-200 pb-3">
+        <h1 className="text-3xl font-extrabold text-gray-900 mb-4 sm:mb-0">Dashboard</h1>
+        <div className="flex space-x-6">
+          <h2 className="py-2 px-1 text-base font-bold border-b-2 border-blue-600 text-blue-600 cursor-pointer transition duration-150">
+            Overview
+          </h2>
+          <h2 className="py-2 px-1 text-base text-gray-600 hover:text-blue-600 cursor-pointer transition duration-150">
+            Getting Started
+          </h2>
+          <h2 className="py-2 px-1 text-base text-gray-600 hover:text-blue-600 cursor-pointer transition duration-150">
+            Recent Updates
+          </h2>
+        </div>
       </div>
 
       {/* Receivables & Payables Cards */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-        {/* Total Receivables Card */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Total Receivables
-            </h3>
-            <button className="flex items-center text-blue-600 text-sm font-semibold">
-              <PlusIcon className="w-4 h-4 mr-1" />
-              New
-            </button>
-          </div>
-          <div className="bg-gray-100 h-10 mb-4 rounded-md flex items-center px-4 text-sm text-gray-500">
-            Total Unpaid Invoices: ₹0.00
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        
+        {/* Total Receivables Card (Sales) */}
+        <DashboardCard 
+            title="Total Receivables" 
+            icon={<ArrowTrendingUpIcon className="w-5 h-5 text-green-600" />} 
+            color="green"
+        >
+          <div className="text-sm text-gray-600 mb-6 bg-green-50 p-3 rounded-lg border border-green-200 font-medium">
+            Total Unpaid Invoices: <span className="font-bold text-green-700">₹0.00</span>
           </div>
 
-          <div className="flex justify-between space-x-4">
-            <div className="flex-1 p-3 bg-white border border-gray-200 rounded-lg">
-              <p className="text-sm text-gray-500">CURRENT</p>
-              <div className="flex items-center text-2xl font-bold mt-1">
-                <CurrencyRupeeIcon className="w-5 h-5 mr-1" />
-                0.00
-              </div>
-            </div>
-            <div className="flex-1 p-3 bg-white border border-gray-200 rounded-lg">
-              <p className="text-sm text-red-500">OVERDUE</p>
-              <div className="flex items-center text-2xl font-bold text-red-600 mt-1 cursor-pointer">
-                <CurrencyRupeeIcon className="w-5 h-5 mr-1" />
-                0.00
-                <ChevronDownIcon className="w-4 h-4 ml-1" />
-              </div>
-            </div>
+          <div className="flex space-x-4 flex-1">
+            <MetricBox title="Current" amount={0.00} />
+            <MetricBox title="Overdue" amount={0.00} isOverdue={true} />
           </div>
-        </div>
+        </DashboardCard>
 
-        {/* Total Payables Card - Styled similarly */}
-        <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-          <div className="flex justify-between items-center mb-4">
-            <h3 className="text-xl font-semibold text-gray-800">
-              Total Payables
-            </h3>
-            <button className="flex items-center text-blue-600 text-sm font-semibold">
-              <PlusIcon className="w-4 h-4 mr-1" />
-              New
-            </button>
-          </div>
-          <div className="bg-gray-100 h-10 mb-4 rounded-md flex items-center px-4 text-sm text-gray-500">
-            Total Unpaid Bills: ₹0.00
+        {/* Total Payables Card (Purchases) */}
+        <DashboardCard 
+            title="Total Payables" 
+            icon={<ArrowTrendingDownIcon className="w-5 h-5 text-red-600" />} 
+            color="red"
+        >
+          <div className="text-sm text-gray-600 mb-6 bg-red-50 p-3 rounded-lg border border-red-200 font-medium">
+            Total Unpaid Bills: <span className="font-bold text-red-700">₹0.00</span>
           </div>
 
-          <div className="flex justify-between space-x-4">
-            <div className="flex-1 p-3 bg-white border border-gray-200 rounded-lg">
-              <p className="text-sm text-gray-500">CURRENT</p>
-              <div className="flex items-center text-2xl font-bold mt-1">
-                <CurrencyRupeeIcon className="w-5 h-5 mr-1" />
-                0.00
-              </div>
-            </div>
-            <div className="flex-1 p-3 bg-white border border-gray-200 rounded-lg">
-              <p className="text-sm text-red-500">OVERDUE</p>
-              <div className="flex items-center text-2xl font-bold text-red-600 mt-1 cursor-pointer">
-                <CurrencyRupeeIcon className="w-5 h-5 mr-1" />
-                0.00
-                <ChevronDownIcon className="w-4 h-4 ml-1" />
-              </div>
-            </div>
+          <div className="flex space-x-4 flex-1">
+            <MetricBox title="Current" amount={0.00} />
+            <MetricBox title="Overdue" amount={0.00} isOverdue={true} />
           </div>
-        </div>
+        </DashboardCard>
       </div>
 
       {/* Cash Flow Section */}
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-        <div className="flex justify-between items-center mb-4">
-          <h3 className="text-xl font-semibold text-gray-800">Cash Flow</h3>
-          <select className="text-sm text-gray-600 border border-gray-300 rounded-md p-1">
+      <div className="bg-white p-6 rounded-xl shadow-lg-2 border border-gray-100">
+        <div className="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+          <h3 className="text-xl font-bold text-gray-800">Cash Flow</h3>
+          <select className="text-sm text-gray-600 border border-gray-300 rounded-lg p-2 focus:ring-blue-500 focus:border-blue-500 transition">
             <option>This Fiscal Year</option>
             <option>Last 30 Days</option>
+            <option>Last 12 Months</option>
           </select>
         </div>
 
         {/* Placeholder for the chart/graph area */}
-        <div className="flex h-64 border border-gray-100 rounded-md">
-          <div className="w-1/6 py-2 pr-4 flex flex-col justify-between text-xs text-gray-500 border-r">
+        <div className="flex h-80 border border-gray-200 rounded-lg overflow-hidden bg-gray-50">
+          
+          {/* Y-Axis Labels */}
+          <div className="w-16 py-4 pr-4 flex flex-col justify-between text-xs text-gray-500 border-r border-gray-200">
             <p className="text-right">5 K</p>
             <p className="text-right">4 K</p>
             <p className="text-right">3 K</p>
+            <p className="text-right">2 K</p>
+            <p className="text-right">1 K</p>
+            <p className="text-right">0 K</p>
           </div>
+          
+          {/* Chart Area */}
           <div className="flex-1 relative p-4">
-            <div className="absolute top-4 right-4 text-sm text-gray-600 text-right">
-              <p className="text-xs text-gray-500">Cash as on 01/04/2025</p>
-              <div className="flex items-center justify-end font-bold text-xl">
+            
+            {/* Cash Balance Display (Top Right) */}
+            <div className="absolute top-4 right-4 bg-white p-3 rounded-lg shadow-md-2 text-right border border-gray-100">
+              <p className="text-xs text-gray-500 font-medium">Cash as on 01/04/2025</p>
+              <div className="flex items-center justify-end font-extrabold text-xl text-blue-700 mt-1">
                 <CurrencyRupeeIcon className="w-5 h-5 mr-1" />
                 0.00
               </div>
             </div>
-            <p className="text-gray-400 text-center mt-20">Chart Placeholder</p>
+            
+            {/* Chart Placeholder Text */}
+            <div className="flex items-center justify-center h-full">
+                <p className="text-gray-400 text-lg font-medium border-2 border-dashed border-gray-300 p-6 rounded-lg">
+                    Cash Flow Chart Placeholder (Coming Soon)
+                </p>
+            </div>
           </div>
         </div>
       </div>

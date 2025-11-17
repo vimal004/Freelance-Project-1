@@ -11,6 +11,7 @@ import {
   DocumentTextIcon,
   ChevronRightIcon,
   PlusIcon,
+  ChartPieIcon,
 } from "@heroicons/react/24/outline";
 
 // Simplified icons for demonstration (replace with your custom SVGs later)
@@ -91,13 +92,10 @@ const navItems = [
 
 const SidebarItem = ({ item }) => {
   const location = useLocation();
-  const isActive =
-    location.pathname === item.path ||
-    (item.subItems &&
-      item.subItems.some((sub) => sub.path === location.pathname));
   const isParentActive =
-    item.subItems &&
-    item.subItems.some((sub) => location.pathname.startsWith(sub.path));
+    item.path === location.pathname ||
+    (item.subItems &&
+      item.subItems.some((sub) => location.pathname.startsWith(sub.path)));
 
   const [isOpen, setIsOpen] = useState(isParentActive);
   const Icon = IconMap[item.icon] || HomeIcon;
@@ -109,6 +107,10 @@ const SidebarItem = ({ item }) => {
       setIsOpen(!isOpen);
     }
   };
+  
+  const isCurrentActive = location.pathname === item.path || (item.subItems && item.subItems.some((sub) => sub.path === location.pathname));
+  const isSubItemActive = item.subItems && item.subItems.some(sub => location.pathname.startsWith(sub.path));
+
 
   return (
     <>
@@ -118,11 +120,11 @@ const SidebarItem = ({ item }) => {
           to={item.path || "#"}
           onClick={isCollapsible ? toggleOpen : null}
           className={`
-            flex items-center p-3 text-sm font-medium transition duration-200 rounded-md 
+            flex items-center p-3 text-sm font-semibold transition duration-200 rounded-lg 
             ${
-              isActive
-                ? "bg-blue-100 text-blue-700 font-semibold"
-                : "text-gray-700 hover:bg-gray-100"
+              isCurrentActive || isSubItemActive
+                ? "bg-blue-600 text-white shadow-md-2" // Use custom shadow
+                : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
             }
             ${isCollapsible ? "justify-between" : ""}
           `}
@@ -136,26 +138,26 @@ const SidebarItem = ({ item }) => {
             <ChevronRightIcon
               className={`w-4 h-4 ml-2 transition-transform duration-300 ${
                 isOpen ? "rotate-90" : "rotate-0"
-              }`}
+              } ${isCurrentActive || isSubItemActive ? "text-white" : "text-gray-500"}`}
             />
           )}
           {item.hasRightElement && (
-            <PlusIcon className="w-4 h-4 text-gray-500 hover:text-blue-600 absolute right-3" />
+            <PlusIcon className={`w-4 h-4 absolute right-3 ${isCurrentActive || isSubItemActive ? "text-white hover:text-blue-200" : "text-gray-500 hover:text-blue-600"}`} />
           )}
         </Link>
 
         {isCollapsible && isOpen && (
-          <ul className="pl-6 py-1 space-y-1">
+          <ul className="pl-6 py-1 space-y-1 bg-white border-l-2 border-blue-100 ml-4">
             {item.subItems.map((sub, index) => (
               <li key={index}>
                 <Link
                   to={sub.path}
                   className={`
-                    flex justify-between items-center py-2 px-3 text-sm rounded-md transition duration-200
+                    flex justify-between items-center py-2 px-3 text-sm rounded-lg transition duration-200
                     ${
                       location.pathname === sub.path
-                        ? "bg-blue-50 text-blue-700 font-semibold"
-                        : "text-gray-600 hover:bg-gray-50"
+                        ? "text-blue-700 font-semibold bg-blue-100" // Sub-item active style
+                        : "text-gray-600 hover:bg-gray-100"
                     }
                   `}
                 >
@@ -173,30 +175,29 @@ const SidebarItem = ({ item }) => {
 
 const Sidebar = () => {
   return (
-    <div className="w-60 flex-shrink-0 bg-white border-r border-gray-200 h-full overflow-y-auto">
-      <div className="p-4">
-        {/* App Logo/Header placeholder */}
-        <div className="text-xl font-extrabold text-blue-700 mb-6">
-          MERN Dashboard
-        </div>
+    // Enhanced Sidebar shadow (shadow-xl-2)
+    <div className="w-64 flex-shrink-0 bg-white border-r border-gray-200 h-full overflow-y-auto shadow-xl-2"> 
+      <div className="p-4 flex flex-col h-full">
+        {/* App Logo/Header placeholder - Premium Look */}
+        <Link to="/home" className="flex items-center text-2xl font-black text-blue-700 mb-8 px-2 py-1 tracking-wider">
+          <ChartPieIcon className="w-7 h-7 mr-2 text-blue-500" />
+          Kayaa ERP
+        </Link>
 
-        <ul className="space-y-1">
+        <ul className="space-y-1 flex-1">
           {navItems.map((item, index) => (
             <SidebarItem key={index} item={item} />
           ))}
         </ul>
 
-        {/* Apps Section */}
-        <div className="mt-8 pt-4 border-t border-gray-200">
-          <h4 className="text-xs font-semibold text-gray-500 uppercase mb-3">
-            Apps
+        {/* Apps Section - Moved to bottom area */}
+        <div className="mt-auto pt-4 border-t border-gray-200">
+          <h4 className="text-xs font-bold text-gray-500 uppercase mb-3 px-2">
+            Settings & Help
           </h4>
          
-        </div>
-
-        {/* Configure Features Button */}
-        <div className="mt-4">
-          <button className="w-full flex items-center justify-center p-3 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg">
+          {/* Configure Features Button - Enhanced Style */}
+          <button className="w-full flex items-center justify-center p-3 text-sm font-semibold text-blue-700 bg-blue-100 hover:bg-blue-200 rounded-lg transition duration-200">
             Configure Features
             <ChevronRightIcon className="w-4 h-4 ml-2" />
           </button>

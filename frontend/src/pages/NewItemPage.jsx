@@ -3,12 +3,11 @@ import { Link } from "react-router-dom";
 import {
   InformationCircleIcon,
   ChevronDownIcon,
-  XMarkIcon, // Added for potential cleanup in a later stage
+  XMarkIcon, 
 } from "@heroicons/react/24/outline";
-// Assuming constants.js is correctly located at this path
 import { UNIT_OPTIONS, ACCOUNT_OPTIONS } from "../data/constants";
 
-// --- Reusable Input Component for consistency ---
+// --- Reusable Input Component - Material Floating Label Style ---
 const LabeledInput = ({
   id,
   label,
@@ -17,50 +16,47 @@ const LabeledInput = ({
   placeholder = "",
   currency = null,
 }) => (
-  <div className="flex flex-col space-y-1">
+  <div className="flex flex-col space-y-1 relative">
+    {/* Input Field */}
+    <input
+      id={id}
+      type={type}
+      className={`peer w-full h-12 px-4 pt-4 pb-0 border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-transparent focus:outline-none focus:ring-1 focus:ring-blue-600 focus:border-blue-600 transition duration-200 ${currency ? 'pl-16' : ''}`}
+      placeholder=" "
+    />
+    {/* Currency Prefix */}
+    {currency && (
+      <span className="absolute left-0 top-1/2 transform -translate-y-1/2 ml-4 text-sm font-semibold text-gray-600 pointer-events-none">
+        {currency}
+      </span>
+    )}
+    {/* Floating Label */}
     <label
       htmlFor={id}
-      className={`text-xs font-semibold ${
-        required ? "text-red-600" : "text-gray-600"
-      }`}
+      className={`absolute left-4 top-1 text-xs text-gray-500 transition-all peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-400 peer-placeholder-shown:top-3 peer-focus:top-1 peer-focus:text-xs peer-focus:text-blue-600 ${required ? 'peer-focus:text-red-600' : ''}`}
     >
       {label}
       {required && "*"}
     </label>
-    <div className="flex items-center">
-      {currency && (
-        <span className="text-sm font-semibold text-gray-600 border border-r-0 border-gray-300 bg-gray-50 p-2 rounded-l-md">
-          {currency}
-        </span>
-      )}
-      <input
-        id={id}
-        type={type}
-        className={`flex-1 border border-gray-300 p-2 text-sm focus:ring-blue-500 focus:border-blue-500 ${
-          currency ? "rounded-r-md" : "rounded-md"
-        }`}
-        placeholder={placeholder}
-      />
-    </div>
   </div>
 );
 
-// --- Updated DropdownSelect Component (Simplified for UI look) ---
+
+// --- DropdownSelect Component (Updated Styling) ---
 const DropdownSelect = ({
   label,
   options,
   groupOptions,
   required = false,
   defaultValue = "",
-  placeholder = "Select or type to add", // Added placeholder prop
+  placeholder = "Select or type to add",
 }) => {
   const [value, setValue] = useState(defaultValue);
 
-  // Determine if grouped or simple options are used
   const renderOptions = () => {
     if (groupOptions) {
       return groupOptions.map((group, index) => (
-        <optgroup key={index} label={group.group}>
+        <optgroup key={index} label={group.group} className="font-semibold">
           {group.options.map((option) => (
             <option key={option} value={option}>
               {option}
@@ -79,7 +75,7 @@ const DropdownSelect = ({
   return (
     <div className="flex flex-col space-y-1">
       <label
-        className={`text-xs font-semibold ${
+        className={`text-xs font-semibold mb-1 ${
           required ? "text-red-600" : "text-gray-600"
         }`}
       >
@@ -90,9 +86,8 @@ const DropdownSelect = ({
         <select
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          className="w-full border border-gray-300 rounded-md p-2 text-sm appearance-none focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-700"
+          className="w-full border border-gray-300 rounded-lg p-2.5 text-sm appearance-none focus:ring-blue-600 focus:border-blue-600 bg-white text-gray-800 shadow-sm"
         >
-          {/* Display placeholder text when value is empty */}
           {!value && (
             <option value="" disabled className="text-gray-400">
               {placeholder}
@@ -114,43 +109,44 @@ const DropdownSelect = ({
 };
 
 const NewItemPage = () => {
-  // Mock state for item type
   const [itemType, setItemType] = useState("goods");
 
-  // Helper for consistent label display
   const LabelWithInfo = ({ children }) => (
-    <div className="flex items-center space-x-1 text-sm text-gray-700">
+    <div className="flex items-center space-x-1 text-sm text-gray-700 font-semibold">
       {children}
-      <InformationCircleIcon className="w-4 h-4 text-gray-400 cursor-pointer" />
+      <InformationCircleIcon className="w-4 h-4 text-blue-400 cursor-pointer hover:text-blue-600 transition" />
     </div>
   );
 
   return (
-    <div className="p-6">
-      {/* Header */}
+    <div className="p-8">
+      {/* Header - Consistent Look */}
       <div className="flex justify-between items-center mb-8 border-b pb-4">
-        <h1 className="text-3xl font-semibold text-gray-800">New Item</h1>
+        <h1 className="text-3xl font-extrabold text-gray-900">New Item</h1>
         <div className="flex space-x-3">
           <Link
             to="/items"
-            className="py-2 px-4 text-sm text-gray-600 border border-gray-300 rounded-md hover:bg-gray-50"
+            className="py-2 px-4 text-sm text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 transition"
           >
             Cancel
           </Link>
-          <button className="py-2 px-4 text-sm bg-blue-600 text-white rounded-md hover:bg-blue-700 transition">
+          <button className="py-2 px-4 text-sm bg-blue-600 text-white rounded-lg shadow-md-2 hover:bg-blue-700 transition">
             Save
           </button>
         </div>
       </div>
 
-      {/* Item Form Card */}
-      <div className=" bg-white p-8 rounded-lg shadow-lg">
+      {/* Item Form Card - Consistent Elevation */}
+      <div className=" bg-white p-8 rounded-xl shadow-xl-2 border border-gray-100">
+        
         {/* Type & Name Row */}
-        <div className="space-y-6">
+        <div className="space-y-8">
+          
+          {/* Item Type */}
           <div className="flex items-center space-x-10">
             <LabelWithInfo>Type</LabelWithInfo>
             <div className="flex space-x-6">
-              <label className="flex items-center text-sm">
+              <label className="flex items-center text-sm font-medium">
                 <input
                   type="radio"
                   name="itemType"
@@ -161,7 +157,7 @@ const NewItemPage = () => {
                 />
                 <span className="ml-2 text-gray-700">Goods</span>
               </label>
-              <label className="flex items-center text-sm">
+              <label className="flex items-center text-sm font-medium">
                 <input
                   type="radio"
                   name="itemType"
@@ -176,36 +172,37 @@ const NewItemPage = () => {
           </div>
 
           {/* Name Input */}
-          <div className="w-1/2 pr-4">
+          <div className="w-full sm:w-1/2">
             <LabeledInput
               id="itemName"
               label="Name"
               required={true}
+              type="text"
               placeholder="Enter item name"
             />
           </div>
 
           {/* Unit Dropdown */}
-          <div className="w-1/2 pr-4">
+          <div className="w-full sm:w-1/2">
             <DropdownSelect
               label="Unit"
               options={UNIT_OPTIONS}
-              defaultValue="KGS" // Set default value to 'kg' (code KGS) for visual matching
+              defaultValue="KGS"
               required={false}
               placeholder="Select or type to add"
             />
           </div>
         </div>
 
-        <div className="h-6 border-b border-gray-200 mt-10 mb-8"></div>
+        <div className="h-px bg-gray-200 mt-10 mb-8"></div> {/* Separator */}
 
         {/* Sales & Purchase Columns */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-8">
           {/* LEFT COLUMN: Sales Information */}
           <div className="space-y-6">
             <div className="flex justify-between items-center mb-4">
-              <h4 className="font-semibold text-gray-800">Sales Information</h4>
-              <label className="flex items-center text-sm text-gray-700 cursor-pointer">
+              <h4 className="text-lg font-bold text-gray-800">Sales Information</h4>
+              <label className="flex items-center text-sm text-gray-700 font-medium cursor-pointer">
                 <input
                   type="checkbox"
                   defaultChecked
@@ -216,50 +213,42 @@ const NewItemPage = () => {
             </div>
 
             {/* Selling Price */}
-            <div className="flex flex-col space-y-1">
-              <label className="text-xs font-semibold text-red-600">
-                Selling Price*
-              </label>
-              <div className="flex space-x-0">
-                {/* INR Currency Box */}
-                <div className="text-sm font-semibold text-gray-600 border border-r-0 border-gray-300 bg-gray-50 p-2 rounded-l-md w-16 flex items-center justify-center">
-                  INR
-                </div>
-                <input
-                  type="number"
-                  className="flex-1 border border-gray-300 rounded-r-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-            </div>
+            <LabeledInput
+                id="sellingPrice"
+                label="Selling Price"
+                required={true}
+                type="number"
+                currency="INR"
+            />
 
             {/* Sales Account */}
             <DropdownSelect
               label="Account"
               groupOptions={ACCOUNT_OPTIONS}
-              defaultValue="Sales" // Assuming 'Sales' is a revenue account, not listed in constants but common.
+              defaultValue="Sales" 
               required={true}
-              placeholder="Sales"
+              placeholder="Select Sales Account"
             />
 
             {/* Description (Sales) */}
             <div className="flex flex-col space-y-1">
-              <label className="text-xs font-semibold text-gray-600">
-                Description
+              <label className="text-xs font-semibold text-gray-600 mb-1">
+                Description (Sales)
               </label>
               <textarea
                 rows="3"
-                className="border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                className="border border-gray-300 rounded-lg p-3 text-sm focus:ring-blue-600 focus:border-blue-600 shadow-sm"
               ></textarea>
             </div>
           </div>
 
           {/* RIGHT COLUMN: Purchase Information */}
-          <div className="space-y-6">
+          <div className="space-y-6 border-t md:border-t-0 md:border-l md:pl-12 pt-8 md:pt-0 border-gray-200">
             <div className="flex justify-between items-center mb-4">
-              <h4 className="font-semibold text-gray-800">
+              <h4 className="text-lg font-bold text-gray-800">
                 Purchase Information
               </h4>
-              <label className="flex items-center text-sm text-gray-700 cursor-pointer">
+              <label className="flex items-center text-sm text-gray-700 font-medium cursor-pointer">
                 <input
                   type="checkbox"
                   defaultChecked
@@ -270,21 +259,13 @@ const NewItemPage = () => {
             </div>
 
             {/* Cost Price */}
-            <div className="flex flex-col space-y-1">
-              <label className="text-xs font-semibold text-red-600">
-                Cost Price*
-              </label>
-              <div className="flex space-x-0">
-                {/* INR Currency Box */}
-                <div className="text-sm font-semibold text-gray-600 border border-r-0 border-gray-300 bg-gray-50 p-2 rounded-l-md w-16 flex items-center justify-center">
-                  INR
-                </div>
-                <input
-                  type="number"
-                  className="flex-1 border border-gray-300 rounded-r-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
-                />
-              </div>
-            </div>
+            <LabeledInput
+                id="costPrice"
+                label="Cost Price"
+                required={true}
+                type="number"
+                currency="INR"
+            />
 
             {/* Purchase Account */}
             <DropdownSelect
@@ -292,28 +273,28 @@ const NewItemPage = () => {
               groupOptions={ACCOUNT_OPTIONS}
               defaultValue="Cost of Goods Sold"
               required={true}
-              placeholder="Cost of Goods Sold"
+              placeholder="Select Purchase Account"
             />
 
             {/* Description (Purchase) */}
             <div className="flex flex-col space-y-1">
-              <label className="text-xs font-semibold text-gray-600">
-                Description
+              <label className="text-xs font-semibold text-gray-600 mb-1">
+                Description (Purchase)
               </label>
               <textarea
                 rows="3"
-                className="border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                className="border border-gray-300 rounded-lg p-3 text-sm focus:ring-blue-600 focus:border-blue-600 shadow-sm"
               ></textarea>
             </div>
 
             {/* Preferred Vendor */}
             <div className="flex flex-col space-y-1">
-              <label className="text-xs font-semibold text-gray-600">
+              <label className="text-xs font-semibold text-gray-600 mb-1">
                 Preferred Vendor
               </label>
               <input
                 type="text"
-                className="border border-gray-300 rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500"
+                className="border border-gray-300 rounded-lg p-2.5 text-sm focus:ring-blue-600 focus:border-blue-600 shadow-sm"
                 placeholder="Select or type to add"
               />
             </div>

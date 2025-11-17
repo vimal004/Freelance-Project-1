@@ -8,27 +8,32 @@ import {
 
 const ItemsPage = () => {
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold text-gray-800">All Items</h1>
-        <div className="flex items-center space-x-3">
+    <div className="p-8">
+      {/* Header - Consistent Look */}
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-extrabold text-gray-900">All Items</h1>
+        <div className="flex items-center space-x-4">
+          {/* New Item Button - Primary/Elevated Style */}
           <Link
             to="/items/new"
-            className="flex items-center bg-blue-600 text-white text-sm font-semibold py-2 px-4 rounded-md hover:bg-blue-700 transition"
+            className="flex items-center bg-blue-600 text-white text-base font-semibold py-2 px-4 rounded-lg shadow-md-2 hover:bg-blue-700 transition duration-150"
           >
-            <PlusIcon className="w-4 h-4 mr-1" />
-            New
+            <PlusIcon className="w-5 h-5 mr-1" />
+            New Item
           </Link>
-          <EllipsisVerticalIcon className="w-6 h-6 text-gray-500 cursor-pointer" />
+          <button className="p-2 rounded-full hover:bg-gray-100 transition duration-150">
+            <EllipsisVerticalIcon className="w-6 h-6 text-gray-500 cursor-pointer" />
+          </button>
         </div>
       </div>
 
-      <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200 min-h-[70vh]">
-        {/* Table Header Structure from image_f160e7.png */}
-        <div className="flex items-center justify-between border-b border-gray-200 pb-3 mb-3 text-sm font-medium text-gray-500">
+      {/* Content Card - Consistent Elevation */}
+      <div className="bg-white p-6 rounded-xl shadow-lg-2 border border-gray-100 min-h-[70vh]">
+        {/* Table Header/Search */}
+        <div className="flex items-center justify-between border-b border-gray-200 pb-4 mb-4 text-sm font-semibold text-gray-700">
           <div className="flex items-center w-full">
             <input type="checkbox" className="mr-4 text-blue-600 rounded" />
-            <span className="w-1/6 cursor-pointer hover:text-gray-700">
+            <span className="w-1/6 cursor-pointer hover:text-blue-600 transition">
               NAME &uarr;
             </span>
             <span className="w-1/6">PURCHASE DESCRIPTION</span>
@@ -37,13 +42,18 @@ const ItemsPage = () => {
             <span className="w-1/6">RATE</span>
             <span className="w-1/6">USAGE UNIT</span>
           </div>
-          <MagnifyingGlassIcon className="w-5 h-5 text-gray-400" />
+          <div className="flex items-center ml-4">
+            <MagnifyingGlassIcon className="w-5 h-5 text-gray-400 mr-2" />
+            <input type="text" placeholder="Search" className="border border-gray-300 rounded-lg p-1.5 text-sm focus:ring-blue-500 focus:border-blue-500 w-48" />
+          </div>
         </div>
 
         {/* Empty State / Placeholder Content */}
-        <div className="flex items-center justify-center h-full pt-20">
+        <div className="flex flex-col items-center justify-center h-full pt-20">
+          <svg className="w-16 h-16 text-blue-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H10v-2.828l8.586-8.586z"></path></svg>
+          <p className="text-xl font-semibold text-gray-700 mb-2">No Items Found</p>
           <p className="text-gray-500 text-center">
-            Goods and Services, if they have a price tag, put them here.
+            Goods and Services, if they have a price tag, put them here. Click 'New Item' to get started.
           </p>
         </div>
       </div>
