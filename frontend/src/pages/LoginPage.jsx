@@ -68,7 +68,7 @@ const LoginPage = () => {
             Sign In
           </h2>
           <p className="text-lg text-gray-500 font-medium">
-            to Kayaa ERP System
+            ERP System
           </p>
         </div>
         
