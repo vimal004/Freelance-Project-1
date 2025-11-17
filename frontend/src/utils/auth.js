@@ -1,4 +1,11 @@
-// Mock token storage key
+// frontend/src/utils/auth.js
+
+// Mock User Database (to simulate persistence)
+const MOCK_USERS = [
+  { email: "admin@kayaa.com", password: "admin123", role: "Admin" },
+  { email: "user@kayaa.com", password: "user123", role: "User" },
+];
+
 const AUTH_TOKEN_KEY = "mern_dashboard_auth_token";
 
 /**
@@ -9,19 +16,10 @@ const AUTH_TOKEN_KEY = "mern_dashboard_auth_token";
  * @returns {boolean} - True if login is successful (mock credentials match).
  */
 export const login = (email, password, role) => {
-  let isAuthenticated = false;
+  const user = MOCK_USERS.find(u => u.email === email && u.password === password && u.role === role);
 
-  // Hardcoded credentials for mock authentication based on role
-  if (role === "Admin" && email === "123@gmail.com" && password === "123") {
-    isAuthenticated = true;
-  } else if (role === "User" && email === "user@kayaa.com" && password === "user123") {
-    isAuthenticated = true;
-  } else if (role === "Other" && email === "123@gmail.com" && password === "123") {
-    isAuthenticated = true;
-  }
-
-  if (isAuthenticated) {
-    // In a real app, the token would encode the role
+  if (user) {
+    // Store token and the role in local storage
     localStorage.setItem(AUTH_TOKEN_KEY, `mock-jwt-token-${role}`);
     return true;
   }
@@ -36,7 +34,43 @@ export const isAuthenticated = () => {
   return !!localStorage.getItem(AUTH_TOKEN_KEY);
 };
 
-// You can add a logout function if needed later
+/**
+ * Retrieves the user's role from the stored token.
+ * @returns {string | null} - The role (Admin or User) or null if not authenticated.
+ */
+export const getRole = () => {
+  const token = localStorage.getItem(AUTH_TOKEN_KEY);
+  if (token) {
+    // Mock token structure: mock-jwt-token-ROLE
+    const match = token.match(/mock-jwt-token-(.+)/);
+    // If we can't parse the role, default to 'User'
+    return match ? match[1] : 'User'; 
+  }
+  return null;
+};
+
+/**
+ * Logs out the user and clears authentication state.
+ */
 export const logout = () => {
   localStorage.removeItem(AUTH_TOKEN_KEY);
+};
+
+/**
+ * MOCK function to simulate inviting a new user and assigning a role.
+ * In a real app, this would hit an API endpoint.
+ */
+export const mockInviteUser = (email, role) => {
+    // Check if user already exists
+    if (MOCK_USERS.find(u => u.email === email)) {
+        return { success: false, message: "User already exists." };
+    }
+    
+    // Simulate user creation (using a default mock password)
+    MOCK_USERS.push({ email, password: "default_mock_password", role });
+    
+    // Log for verification
+    console.log(`[MOCK DB] Invited new ${role}: ${email}. Total users: ${MOCK_USERS.length}`);
+
+    return { success: true, message: `Successfully invited ${email} with ${role} privileges.` };
 };
