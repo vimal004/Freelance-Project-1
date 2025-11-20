@@ -77,7 +77,7 @@ const hexToNormalizedRGB = (hex) => {
 const noise = `
 float random (in vec2 st) {
     return fract(sin(dot(st.xy,
-                         vec2(12.9898,78.233)))*
+                          vec2(12.9898,78.233)))*
         43758.5453123);
 }
 float noise (in vec2 st) {
@@ -89,8 +89,8 @@ float noise (in vec2 st) {
     float d = random(i + vec2(1.0, 1.0));
     vec2 u = f * f * (3.0 - 2.0 * f);
     return mix(a, b, u.x) +
-           (c - a)* u.y * (1.0 - u.x) +
-           (d - b) * u.x * u.y;
+          (c - a)* u.y * (1.0 - u.x) +
+          (d - b) * u.x * u.y;
 }
 vec4 permute(vec4 x){return mod(((x*34.0)+1.0)*x, 289.0);}
 vec4 taylorInvSqrt(vec4 r){return 1.79284291400159 - 0.85373472095314 * r;}
@@ -303,7 +303,10 @@ const MergedPlanes = forwardRef(({ material, width, count, height }, ref) => {
     [count, width, height]
   );
   useFrame((_, delta) => {
-    mesh.current.material.uniforms.time.value += 0.1 * delta;
+    // Only update time if uniforms exist
+    if (mesh.current?.material?.uniforms?.time) {
+      mesh.current.material.uniforms.time.value += 0.1 * delta;
+    }
   });
   return <mesh ref={mesh} geometry={geometry} material={material} />;
 });
