@@ -1,30 +1,27 @@
 import React from "react";
-import { Routes, Route, Navigate, Outlet } from "react-router-dom";
+import { Routes, Route, Navigate, Link } from "react-router-dom";
 // --- Existing Imports ---
 import DashboardLayout from "./src/Components/DashboardLayout.jsx";
 import DashboardPage from "./src/pages/DashboardPage.jsx";
 import ItemsPage from "./src/pages/ItemsPage.jsx";
 import NewItemPage from "./src/pages/NewItemPage.jsx";
-import "./App.css";
-
-// --- New Imports ---
 import LoginPage from "./src/pages/LoginPage.jsx";
 import { isAuthenticated } from "./src/utils/auth.js";
-// --- End New Imports ---
+// --- New Sales Imports ---
+import CustomersPage from "./src/pages/sales/CustomersPage.jsx";
+import NewCustomerPage from "./src/pages/sales/NewCustomerPage.jsx";
+// --- End New Sales Imports ---
+import "./App.css";
 
-// --- Protected Route Wrapper ---
-// This component checks for authentication and renders the layout/children if true
+// --- Protected Route Wrapper (Same as before) ---
 const ProtectedRoute = () => {
-  // If the user is NOT authenticated, redirect them to the login page (/).
   if (!isAuthenticated()) {
     return <Navigate to="/" replace />;
   }
-  // If authenticated, render the Dashboard Layout which contains the <Outlet /> for nested routes.
   return <DashboardLayout />;
 };
-// --- End Protected Route Wrapper ---
 
-// --- Placeholder Pages (Used for other navigation items) ---
+// --- Placeholder Pages (Used for non-implemented navigation items) ---
 const PlaceholderPage = ({ title }) => (
   <div className="p-6">
     <h2 className="text-3xl font-bold text-gray-800">{title}</h2>
@@ -34,7 +31,7 @@ const PlaceholderPage = ({ title }) => (
   </div>
 );
 
-// --- 404 Page Component ---
+// --- 404 Page Component (Same as before) ---
 const NotFound = () => (
   <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
     <h1 className="text-4xl font-bold text-red-600">404 - Not Found</h1>
@@ -49,7 +46,6 @@ const NotFound = () => (
     </Link>
   </div>
 );
-// --- End 404 Page Component ---
 
 function App() {
   return (
@@ -66,20 +62,21 @@ function App() {
         <Route path="items" element={<ItemsPage />} />
         <Route path="items/new" element={<NewItemPage />} />
         {/* --------------------- */}
+        
+        {/* --- Sales Routes --- */}
+        <Route path="sales/customers" element={<CustomersPage />} />
+        <Route path="sales/customers/new" element={<NewCustomerPage />} />
+        <Route path="sales/quotes" element={<PlaceholderPage title="Quotes List" />} />
+        <Route path="sales/salesorders" element={<PlaceholderPage title="Sales Orders List" />} />
+        <Route path="sales/invoices" element={<PlaceholderPage title="Invoices List" />} />
+        <Route path="sales/recurringinvoices" element={<PlaceholderPage title="Recurring Invoices List" />} />
+        <Route path="sales/deliverychallans" element={<PlaceholderPage title="Delivery Challans List" />} />
+        <Route path="sales/paymentsreceived" element={<PlaceholderPage title="Payments Received List" />} />
+        <Route path="sales/creditnotes" element={<PlaceholderPage title="Credit Notes List" />} />
+        {/* --------------------- */}
 
-        {/* Nested Routes matching the sidebar structure */}
-        <Route
-          path="sales/customers"
-          element={<PlaceholderPage title="Customers" />}
-        />
-        <Route
-          path="sales/quotes"
-          element={<PlaceholderPage title="Quotes" />}
-        />
-        <Route
-          path="sales/invoices"
-          element={<PlaceholderPage title="Invoices" />}
-        />
+
+        {/* Nested Routes (Placeholders) matching the sidebar structure */}
         <Route
           path="purchases/vendors"
           element={<PlaceholderPage title="Vendors" />}

@@ -12,7 +12,7 @@ import {
   ChevronRightIcon,
   PlusIcon,
   ChartPieIcon,
-  XMarkIcon, // New import for close button
+  XMarkIcon, 
 } from "@heroicons/react/24/outline";
 
 const IconMap = {
@@ -23,15 +23,16 @@ const IconMap = {
   TimeTracking: ClockIcon,
   Banking: BuildingLibraryIcon,
   Accountant: CalculatorIcon,
-  Reports: DocumentTextIcon,
+  Reports: ChartPieIcon, // Using ChartPie for Reports
   Documents: DocumentTextIcon,
 };
 
 const navItems = [
-  { name: "Home", path: "/Home", icon: "Home", isSingle: true },
+  { name: "Home", path: "/home", icon: "Home", isSingle: true }, // Corrected path to /home
   {
     name: "Items",
     icon: "Items",
+    path: "/items", // Added path for top-level navigation
     subItems: [
       { name: "Items", path: "/items" },
       // Add other sub-items from your HTML snippet if needed
@@ -41,10 +42,14 @@ const navItems = [
     name: "Sales",
     icon: "Sales",
     subItems: [
-      { name: "Customers", path: "/sales/customers" },
+      { name: "Customers", path: "/sales/customers" }, // Corrected to new Customers path
       { name: "Quotes", path: "/sales/quotes" },
+      { name: "Sales Orders", path: "/sales/salesorders" }, // Added Sales Orders from original plan
       { name: "Invoices", path: "/sales/invoices" },
-      // ... more sales items
+      { name: "Recurring Invoices", path: "/sales/recurringinvoices" },
+      { name: "Delivery Challans", path: "/sales/deliverychallans" },
+      { name: "Payments Received", path: "/sales/paymentsreceived" },
+      { name: "Credit Notes", path: "/sales/creditnotes" },
     ],
   },
   {
@@ -92,6 +97,7 @@ const navItems = [
 
 const SidebarItem = ({ item }) => {
   const location = useLocation();
+  // Check if current location starts with any sub-item path (for parent highlighting)
   const isParentActive =
     item.path === location.pathname ||
     (item.subItems &&
@@ -108,9 +114,9 @@ const SidebarItem = ({ item }) => {
     }
   };
   
-  const isCurrentActive = location.pathname === item.path || (item.subItems && item.subItems.some((sub) => sub.path === location.pathname));
+  // Check if this item or a direct child is the current active route
+  const isCurrentActiveLink = location.pathname === item.path;
   const isSubItemActive = item.subItems && item.subItems.some(sub => location.pathname.startsWith(sub.path));
-
 
   return (
     <>
@@ -122,7 +128,7 @@ const SidebarItem = ({ item }) => {
           className={`
             flex items-center p-3 text-sm font-semibold transition duration-200 rounded-lg 
             ${
-              isCurrentActive || isSubItemActive
+              isCurrentActiveLink || isSubItemActive
                 ? "bg-blue-600 text-white shadow-md-2" // Use custom shadow
                 : "text-gray-700 hover:bg-blue-50 hover:text-blue-700"
             }
@@ -138,16 +144,17 @@ const SidebarItem = ({ item }) => {
             <ChevronRightIcon
               className={`w-4 h-4 ml-2 transition-transform duration-300 ${
                 isOpen ? "rotate-90" : "rotate-0"
-              } ${isCurrentActive || isSubItemActive ? "text-white" : "text-gray-500"}`}
+              } ${isCurrentActiveLink || isSubItemActive ? "text-white" : "text-gray-500"}`}
             />
           )}
           {item.hasRightElement && (
-            <PlusIcon className={`w-4 h-4 absolute right-3 ${isCurrentActive || isSubItemActive ? "text-white hover:text-blue-200" : "text-gray-500 hover:text-blue-600"}`} />
+            <PlusIcon className={`w-4 h-4 absolute right-3 ${isCurrentActiveLink || isSubItemActive ? "text-white hover:text-blue-200" : "text-gray-500 hover:text-blue-600"}`} />
           )}
         </Link>
 
         {isCollapsible && isOpen && (
-          <ul className="pl-6 py-1 space-y-1 bg-white border-l-2 border-blue-100 ml-4">
+          // Adjusted nested UL background for better contrast
+          <ul className="pl-6 py-1 space-y-1 bg-gray-50 border-l-2 border-blue-100 ml-4">
             {item.subItems.map((sub, index) => (
               <li key={index}>
                 <Link
@@ -155,14 +162,17 @@ const SidebarItem = ({ item }) => {
                   className={`
                     flex justify-between items-center py-2 px-3 text-sm rounded-lg transition duration-200
                     ${
-                      location.pathname === sub.path
-                        ? "text-blue-700 font-semibold bg-blue-100" // Sub-item active style
+                      location.pathname.startsWith(sub.path)
+                        ? "text-blue-700 font-semibold bg-blue-100" // Use startsWith for nested routes
                         : "text-gray-600 hover:bg-gray-100"
                     }
                   `}
                 >
                   <span className="truncate">{sub.name}</span>
-                  <PlusIcon className="w-4 h-4 text-gray-400 hover:text-blue-600 ml-auto" />
+                  {/* Plus Icon only for New/Add actions (like New Customer, New Quote) */}
+                  {['Customers', 'Quotes', 'Sales Orders', 'Invoices', 'Recurring Invoices', 'Delivery Challans', 'Payments Received', 'Credit Notes', 'Bills', 'Vendors', 'Manual Journals'].includes(sub.name) && (
+                    <PlusIcon className="w-4 h-4 text-gray-400 hover:text-blue-600 ml-auto" />
+                  )}
                 </Link>
               </li>
             ))}
