@@ -14,6 +14,8 @@ import QuotesPage from "./src/pages/sales/QuotesPage.jsx";
 import NewQuotePage from "./src/pages/sales/NewQuotePage.jsx";
 import SalesOrdersPage from "./src/pages/sales/SalesOrdersPage.jsx";
 import NewSalesOrderPage from "./src/pages/sales/NewSalesOrderPage.jsx";
+import InvoicesPage from "./src/pages/sales/InvoicesPage.jsx";
+import NewInvoicePage from "./src/pages/sales/NewInvoicePage.jsx";
 // --- End New Sales Imports ---
 import "./App.css";
 
@@ -74,7 +76,8 @@ function App() {
         <Route path="sales/quotes/new" element={<NewQuotePage />} />
         <Route path="sales/salesorders" element={<SalesOrdersPage />} />
         <Route path="sales/salesorders/new" element={<NewSalesOrderPage />} />
-        <Route path="sales/invoices" element={<PlaceholderPage title="Invoices List" />} />
+        <Route path="sales/invoices" element={<InvoicesPage />} />
+        <Route path="sales/invoices/new" element={<NewInvoicePage />} />
         <Route path="sales/recurringinvoices" element={<PlaceholderPage title="Recurring Invoices List" />} />
         <Route path="sales/deliverychallans" element={<PlaceholderPage title="Delivery Challans List" />} />
         <Route path="sales/paymentsreceived" element={<PlaceholderPage title="Payments Received List" />} />
